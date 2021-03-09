@@ -1,0 +1,7 @@
+{
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.15",
+      	"ext-mysqli": "*",
+      	"swiftmailer/swiftmailer": "^6.0"
+    }
+}
