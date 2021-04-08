@@ -1,6 +1,6 @@
 <?php
 $url=$_SERVER['REQUEST_URI'];
-header("Refresh: 60"); // Refresh the webpage every 1 minute
+header("Refresh: 300");
 ?>
 <html>
 <head>
@@ -45,9 +45,8 @@ header("Refresh: 60"); // Refresh the webpage every 1 minute
 		<?php
 		include('connection.php');
 		$result = mysqli_query($con,'SELECT * FROM arduino_test ORDER BY id DESC');
-		//$result = mysqli_query($con,'SELECT * FROM arduino_test ORDER BY id DESC LIMIT 1');
-// Process every record
 		$oddrow = true;
+		
 		while($row = mysqli_fetch_array($result))
 		{
 			if ($oddrow)
@@ -68,7 +67,6 @@ header("Refresh: 60"); // Refresh the webpage every 1 minute
 			echo "</tr>"; 
 		}
 
-// Close the connection
 		mysqli_close($con);
 		?>
 	</table>

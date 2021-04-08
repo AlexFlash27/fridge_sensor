@@ -1,7 +1,6 @@
 <?php
-//header("Refresh: 0"); // Refresh the webpage every 10 seconds
 
-//%progdir%\modules\wget\bin\wget.exe -q --no-cache http://fridge/index.php //планировщик заданий
+//%progdir%\modules\wget\bin\wget.exe -q --no-cache http://fridge/index.php // планировщик заданий
 
 require 'vendor/autoload.php';
 
@@ -10,13 +9,12 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 date_default_timezone_set('Etc/GMT-4');
 
-//if(date('l') == 'Thursday' && date("H:i:s") == '11:11:00') {
     $host = '192.168.7.1';
     $username = 'root';
     $password = 'root';
     $dbname = 'yii2test';
 
-    $conn = new mysqli($host, $username, $password, $dbname);
+    $conn = new mysqli($host, $username, $password, $dbname); // ПОДКЛЮЧЕНИЕ К БД
 
     if ($conn->connect_error) {
         die("Connection fail:" . $conn->connect_error);
@@ -39,9 +37,9 @@ date_default_timezone_set('Etc/GMT-4');
 
     $query = $conn->query('SELECT * FROM 
 		(SELECT * FROM 
-		(SELECT * FROM arduino_test WHERE TIME(date) BETWEEN "20:00:00" AND "20:00:59" 
+		(SELECT * FROM arduino_test WHERE TIME(date) BETWEEN "20:00:00" AND "20:04:59"
 		UNION
-		SELECT * FROM arduino_test WHERE TIME(date) BETWEEN "05:30:00" AND "05:30:59") AS alias ORDER BY id DESC LIMIT 10) AS alias ORDER BY id ASC');
+		SELECT * FROM arduino_test WHERE TIME(date) BETWEEN "05:30:00" AND "05:34:59") AS alias ORDER BY id DESC LIMIT 10) AS alias ORDER BY id ASC'); // ПОЛУЧАЕМ НУЖНЫЕ ЗНАЧЕНИЯ В СООТВЕТСТВИИ С ЗАДАННЫМ ВРЕМЕНЕМ 
 
     if ($query->num_rows > 0) {
         $i = 2;
@@ -59,50 +57,40 @@ date_default_timezone_set('Etc/GMT-4');
     ->getNumberFormat()
     ->setFormatCode(NumberFormat::FORMAT_DATE_DDMMYYYY);*/
 
-    $activeSheet->getColumnDimension('A')->setWidth(15);
+    $activeSheet->getColumnDimension('A')->setWidth(15); // ЗАДАЕМ ШИРИНУ КОЛОНОК
     $activeSheet->getColumnDimension('B')->setWidth(41);
     $activeSheet->getColumnDimension('C')->setWidth(18);
     $activeSheet->getColumnDimension('D')->setWidth(13);
     $activeSheet->getColumnDimension('E')->setWidth(11);
 
-    $cellC2 = $activeSheet->getCell('C2');
-    $cellC11 = $activeSheet->getCell('C11');
+    $cellCLowest = $activeSheet->getCell('C2'); // ПОЛУЧАЕМ ПЕРВУЮ СТРОКУ С ДАННЫМИ
+    $cellCHighest = $activeSheet->getHighestRow('C'); // ПОЛУЧАЕМ ПОСЛЕДНЮЮ СТРОКУ С ДАННЫМИ
 
-    $cellC2Value = substr($cellC2->getValue(),0,10);
-    $cellC11Value = substr($cellC11->getValue(),0,10);
+    $cellCLowestValue = substr($cellCLowest->getValue(),0,10); // УБИРАЕМ ВРЕМЯ ИЗ ДАТЫ
+    $cellCHighestValue = substr($activeSheet->getCell('C' . $cellCHighest)->getValue(),0,10); // ПОЛУЧАЕМ ЗНАЧЕНИЕ ПОСЛЕДНЕЙ СТРОКИ С ДАННЫМИ И УБИРАЕМ ВРЕМЯ ИЗ ДАТЫ
 
-    //$filename = 'отчет ' . date("d.m.Y") . '.xlsx';
-    $filename = 'отчет ' . $cellC2Value . ':' . $cellC11Value . '.xlsx';
+    $filename = 'журнал за ' . $cellCLowestValue . ':' . $cellCHighestValue . '.xlsx'; //ЗАДАЕМ ИМЯ ФАЙЛА
 
     $writer = new Xlsx($spreadsheet);
-    $writer->save('reports/' . $filename);
-    //$writer->save('C:/Users/user/Desktop/backup/' . $filename);
-
+    $writer->save('reports/' . $filename); // СОХРАНЯЕМ ФАЙЛ В ПАПКУ reports
+    
     ////////////////ОТПРАВКА НА ПОЧТУ////////////////    
-    // Create the SMTP Transport
-    $transport = (new Swift_SmtpTransport('smtp.gmail.com', 587, 'tls'))
+    $transport = (new Swift_SmtpTransport('smtp.gmail.com', 587, 'tls')) // ДАННЫЕ ДЛЯ ОТПРАВКИ ПИСЕМ
         ->setUsername('alexflash27')
         ->setPassword('ouqwpzhnvqzoobkw');
  
-    // Create the Mailer using your created Transport
     $mailer = new Swift_Mailer($transport);
  
-    // Create a message
-    $message = new Swift_Message();
+    $message = new Swift_Message(); // СОЗДАЕМ СООБЩЕНИЕ
  
-    // Set a "subject"
-    /*$filenameSubject = substr($filename,0,-5);*/
-    $message->setSubject('отчет');
+    $filenameSubject = substr($filename,16,-5);
+    $message->setSubject('Журнал температур холодильного оборудования за ' . $filenameSubject); // ТЕМА ПИСЬМА
  
-    // Set the "From address"
-    $message->setFrom(['alexflash27@gmail.com' => 'Admin']);
+    $message->setFrom(['alexflash27@gmail.com' => 'Admin']); // ОТ КОГО ОТПРАВЛЯЕМ ПИСЬМО
  
-    // Set the "To address" [Use setTo method for multiple recipients, argument should be array]
-    $message->addTo('alexflash27@yandex.ru');
+    $message->setTo(['alexflash27@gmail.com']); // КОМУ ОТПРАВЛЯЕМ ПИСЬМО
  
-    // Add an "Attachment" (Also, the dynamic data can be attached)
-    $message->attach(Swift_Attachment::fromPath('reports/' . $filename));
+    $message->attach(Swift_Attachment::fromPath('reports/' . $filename)); // ПРИКРЕПЛЯЕМ ФАЙЛ
       
-    // Send the message
-    $result = $mailer->send($message);
-//}
+    $result = $mailer->send($message); // ОТПРАВЛЯЕМ ПИСЬМО
+ 

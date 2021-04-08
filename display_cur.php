@@ -1,5 +1,5 @@
 <?php
-header("Refresh: 60");
+header("Refresh: 300");
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -33,7 +33,7 @@ header("Refresh: 60");
 			url: '/insert.php',
 			data: 'json',
 			success: function(data){
-    			console.log(data[0]); //Вытаскиваем значение свойства объекта
+    			console.log(data[0]);
     			document.title = 'Датчик № ' + data[0].idSensor;
     		for(var key in data[0]) { 
     			try { document.getElementById(key).innerHTML=data[0][key]; } 
@@ -49,17 +49,5 @@ header("Refresh: 60");
 <div id='temp'>Температура ℃: <b id="temperature"></b></div>
 <div id='hum'>Влажность %: <b id="humidity"></b></div>
 <hr>
-
-<!-- <hr>
-<b id='fridgeName'></b>
-<div id='temp'>Температура ℃: <b id="temperature"></b></div>
-<div id='hum'>Влажность %: <b id="humidity"></b></div>
-<hr>
-
-<hr>
-<b id='fridgeName'></b>
-<div id='temp'>Температура ℃: <b id="temperature"></b></div>
-<div id='hum'>Влажность %: <b id="humidity"></b></div>
-<hr> -->
 
 </html>
