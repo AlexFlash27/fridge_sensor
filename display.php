@@ -1,6 +1,6 @@
 <?php
 $url=$_SERVER['REQUEST_URI'];
-header("Refresh: 300");
+header("Refresh: 150");
 ?>
 <html>
 <head>
@@ -15,7 +15,7 @@ header("Refresh: 300");
 		}
 		table {
 			border: 2px solid #333;
-			font-size: 152%;
+			font-size: 90%;
 			font-family: calibri;
 		}
 		.table_cells_odd {
@@ -37,16 +37,16 @@ header("Refresh: 300");
 	<table border="0" cellspacing="0" cellpadding="4">
 		<tr>
 			<td class="table_titles">№</td>
-			<td class="table_titles">Произв. помещение - <br>холод. оборудование</td>
+			<td class="table_titles">Помещение - <br>Оборудование</td>
 			<td class="table_titles">Дата и время</td>
-			<td class="table_titles">Температура<br>℃</td>
-			<td class="table_titles">Влажность<br>%RH</td>
+			<td class="table_titles">Температура<br>°С</td>
+			<td class="table_titles">Влажность<br>%</td>
 		</tr>
 		<?php
 		include('connection.php');
 		$result = mysqli_query($con,'SELECT * FROM arduino_test ORDER BY id DESC');
 		$oddrow = true;
-		
+
 		while($row = mysqli_fetch_array($result))
 		{
 			if ($oddrow)

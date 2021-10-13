@@ -1,5 +1,5 @@
 <?php
-header("Refresh: 300");
+header("Refresh: 150");
 ?>
 <!DOCTYPE HTML>
 <html>

@@ -32,14 +32,14 @@ date_default_timezone_set('Etc/GMT-4');
     $activeSheet->setCellValue('A1', '№ датчика');
     $activeSheet->setCellValue('B1', 'Произв. помещение-холод. оборудование');
     $activeSheet->setCellValue('C1', 'Дата и время');
-    $activeSheet->setCellValue('D1', 'Температура');
-    $activeSheet->setCellValue('E1', 'Влажность');
+    $activeSheet->setCellValue('D1', 'Температура °С');
+    $activeSheet->setCellValue('E1', 'Влажность %');
 
     $query = $conn->query('SELECT * FROM 
 		(SELECT * FROM 
 		(SELECT * FROM arduino_test WHERE TIME(date) BETWEEN "20:00:00" AND "20:04:59"
 		UNION
-		SELECT * FROM arduino_test WHERE TIME(date) BETWEEN "05:30:00" AND "05:34:59") AS alias ORDER BY id DESC LIMIT 10) AS alias ORDER BY id ASC'); // ПОЛУЧАЕМ НУЖНЫЕ ЗНАЧЕНИЯ В СООТВЕТСТВИИ С ЗАДАННЫМ ВРЕМЕНЕМ 
+		SELECT * FROM arduino_test WHERE TIME(date) BETWEEN "05:30:00" AND "05:34:59") AS alias ORDER BY id DESC LIMIT 10) AS alias ORDER BY fridgeName ASC'); // ПОЛУЧАЕМ НУЖНЫЕ ЗНАЧЕНИЯ В СООТВЕТСТВИИ С ЗАДАННЫМ ВРЕМЕНЕМ 
 
     if ($query->num_rows > 0) {
         $i = 2;
