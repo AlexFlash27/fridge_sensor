@@ -2,7 +2,7 @@
 
 header("Refresh: 290");
 
-$db=new PDO('mysql:dbname=yii2test;host=192.168.7.1;','root','root');  
+$db=new PDO('mysql:dbname=yii2test;host=','','');  
 $row=$db->prepare('SELECT * FROM arduino_test ORDER BY id DESC LIMIT 1');  
 
 $row->execute();
