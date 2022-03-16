@@ -9,9 +9,9 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 date_default_timezone_set('Etc/GMT-4');
 
-    $host = '192.168.7.1';
-    $username = 'root';
-    $password = 'root';
+    $host = '';
+    $username = '';
+    $password = '';
     $dbname = 'yii2test';
 
     $conn = new mysqli($host, $username, $password, $dbname); // ПОДКЛЮЧЕНИЕ К БД
